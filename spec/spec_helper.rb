@@ -24,13 +24,14 @@ module JRubyLauncherHelper
   end
 
   def jruby_launcher(args)
-    output = +""
+    output = ""
 
     command = "#{JRUBY_EXE} #{args}"
     Open3.popen2e(command) do |stdin, stdout_err, wait_thr|
+      p "Spawning: #{command}"
       stdout_err.each do |line|
-        puts line           # live echo
-        output << line      # still capture
+        puts line              # live echo
+        output << line << "\n" # still capture
       end
 
       p "#{command} exited with value: #{wait_thr.value}"
