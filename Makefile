@@ -99,7 +99,7 @@ endif
 # include project implementation makefile
 include $(SUB_IMPLMK)
 
-# Pick conf based on OS. for mingw64, must manually override for now.
+# Pick conf based on OS.
 ifeq ($(OS),Windows_NT)
 CC=gcc
 CONF=mingw64
