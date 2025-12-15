@@ -37,7 +37,7 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
 
   it "should use -Xjdkhome argument above JAVA_HOME" do
     with_environment "JAVA_HOME" => File.join("env", "java", "home") do
-      expect(jruby_launcher_args("-Xjdkhome some/java/home").join).to match(%r{some/java/home})
+      expect(jruby_launcher_args("-Xjdkhome D:\\some\\java\\home").join).to match(%r{D:\\some\\java\\home})
     end
   end
 
