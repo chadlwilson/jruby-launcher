@@ -310,6 +310,7 @@ bool ArgParser::parseArgs(int argc, char *argv[]) {
             CHECK_ARG;
 	    INCR;
             jdkhome = *it;
+            printToConsole("Got JDK home\n");
         } else if (it->compare(ARG_NAME_CP_PREPEND) == 0) {
             CHECK_ARG;
             if (!cpBefore.empty()) {
