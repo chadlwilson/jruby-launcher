@@ -1,6 +1,7 @@
 require 'rspec'
 require 'rbconfig'
 require 'fileutils'
+require 'timeout'
 
 module JRubyLauncherHelper
   JRUBY_EXE = ''
@@ -66,4 +67,8 @@ RSpec.configure do |config|
     ENV.delete("JAVA_ENCODING")
   end
   config.include(JRubyLauncherHelper)
+
+  config.around(:each) do |example|
+    Timeout.timeout(10) { example.run }
+  end
 end
