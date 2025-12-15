@@ -80,7 +80,7 @@ void JvmLauncher::setJavaCmd(const string cmdPath) {
 
 bool JvmLauncher::checkJava(std::string &path, const char *prefix) {
     assert(prefix);
-    printToConsole("Checking java " + path.c_str() + " with prefix " + prefix + "\n");
+    printToConsole(path.c_str());
     logMsg("checkJava('%s', '%s')", path.c_str(), prefix);
 
     if (*path.rbegin() == '\\') {
