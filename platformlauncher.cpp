@@ -214,7 +214,8 @@ bool PlatformLauncher::run(DWORD *retCode) {
 }
 
 bool PlatformLauncher::checkJDKHome() {
-    printToConsole(jdkhome.c_str())
+    printToConsole(jdkhome.c_str());
+    printToConsole("\n");
     if (!jdkhome.empty() && !jvmLauncher.initialize(jdkhome.c_str())) {
         logMsg("Cannot locate java installation in specified jdkhome: %s", jdkhome.c_str());
         string errMsg = "ERROR: Cannot locate Java installation in specified jdkhome:\n";

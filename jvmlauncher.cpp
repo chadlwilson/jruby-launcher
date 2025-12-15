@@ -115,7 +115,8 @@ bool JvmLauncher::checkJava(std::string &path, const char *prefix) {
 }
 
 bool JvmLauncher::initialize(const char *javaPathOrMinVersion) {
-    printToConsole(javaPathOrMinVersion)
+    printToConsole(javaPathOrMinVersion);
+    printToConsole("\n");
     logMsg("JvmLauncher::initialize()\n\tjavaPathOrMinVersion: %s", javaPathOrMinVersion);
     assert(javaPathOrMinVersion);
     
