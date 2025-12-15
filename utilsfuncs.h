@@ -79,7 +79,6 @@ bool normalizePath(char *path, int len);
 bool disableFolderVirtualization(HANDLE hProcess);
 char * getCurrentModulePath(char *path, int pathLen);
 bool getStringFromRegistry(HKEY rootKey, const char *keyName, const char *valueName, std::string &value);
-bool getDwordFromRegistry(HKEY rootKey, const char *keyName, const char *valueName, DWORD &value);
 bool isConsoleAttached();
 #endif  // WIN32
 

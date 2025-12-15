@@ -42,7 +42,7 @@ bool disableFolderVirtualization(HANDLE hProcess) {
 bool getStringFromRegistry(HKEY rootKey, const char *keyName, const char *valueName, string &value) {
     logMsg("getStringFromRegistry()\n\tkeyName: %s\n\tvalueName: %s", keyName, valueName);
     HKEY hKey = 0;
-    if (RegOpenKeyEx(rootKey, keyName, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+    if (RegOpenKeyEx(rootKey, keyName, 0, KEY_READ | KEY_WOW64_64KEY, &hKey) == ERROR_SUCCESS) {
         DWORD valSize = 4096;
         DWORD type = 0;
         char val[4096] = "";
@@ -51,27 +51,6 @@ bool getStringFromRegistry(HKEY rootKey, const char *keyName, const char *valueN
             logMsg("%s: %s", valueName, val);
             RegCloseKey(hKey);
             value = val;
-            return true;
-        } else {
-            logErr(true, false, "RegQueryValueEx() failed.");
-        }
-        RegCloseKey(hKey);
-    } else {
-        logErr(true, false, "RegOpenKeyEx() failed.");
-    }
-    return false;
-}
-
-bool getDwordFromRegistry(HKEY rootKey, const char *keyName, const char *valueName, DWORD &value) {
-    logMsg("getDwordFromRegistry()\n\tkeyName: %s\n\tvalueName: %s", keyName, valueName);
-    HKEY hKey = 0;
-    if (RegOpenKeyEx(rootKey, keyName, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-        DWORD valSize = sizeof(DWORD);
-        DWORD type = 0;
-        if (RegQueryValueEx(hKey, valueName, 0, &type, (BYTE *) &value, &valSize) == ERROR_SUCCESS
-                && type == REG_DWORD) {
-            logMsg("%s: %u", valueName, value);
-            RegCloseKey(hKey);
             return true;
         } else {
             logErr(true, false, "RegQueryValueEx() failed.");
