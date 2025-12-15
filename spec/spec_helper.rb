@@ -4,7 +4,6 @@ require 'fileutils'
 
 module JRubyLauncherHelper
   JRUBY_EXE = ''
-  WINDOWS = RbConfig::CONFIG['target_os'] =~ /mswin/
 
   def self.check_executable_built
     exe = File.expand_path("../../jruby", __FILE__) + RbConfig::CONFIG['EXEEXT']
@@ -16,9 +15,7 @@ module JRubyLauncherHelper
     home = File.join(top, "build/home")
     FileUtils.mkdir_p(File.join(home, "bin"))
     FileUtils.cp(exe, File.join(home, "bin"))
-    if JRubyLauncherHelper::WINDOWS
-      FileUtils.cp(exe.sub(/exe/, 'dll'), File.join(home, "bin"))
-    end
+    FileUtils.cp(exe.sub(/exe/, 'dll'), File.join(home, "bin"))
     FileUtils.mkdir_p(File.join(home, "lib"))
     FileUtils.touch(File.join(home, "lib/jruby.jar"))
     JRUBY_EXE.concat File.join(home, "bin", name)
@@ -34,10 +31,6 @@ module JRubyLauncherHelper
 
   def last_exit_code
     $?.exitstatus
-  end
-
-  def windows?
-    WINDOWS
   end
 
   def classpath_arg(args)

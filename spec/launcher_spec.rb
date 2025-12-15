@@ -25,41 +25,25 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
   it "should use $JAVACMD when JAVACMD is specified" do
     javacmd_path = File.join("path", "to", "jato")
     with_environment "JAVACMD" => javacmd_path do
-      if windows?
-        expect(jruby_launcher_args("-v 2>&1").join).to match(/#{javacmd_path}/)
-      else
-        expect(jruby_launcher_args("-v").first).to eq(javacmd_path)
-      end
+      expect(jruby_launcher_args("-v 2>&1").join).to match(/#{javacmd_path}/)
     end
   end
 
   it "should use $JAVA_HOME/bin/java when JAVA_HOME is specified" do
     with_environment "JAVA_HOME" => File.join("some", "java", "home") do
-      if windows?
-        expect(jruby_launcher_args("-v 2>&1").join).to match(%r{some/java/home})
-      else
-        expect(jruby_launcher_args("-v").first).to eq(File.join("some", "java", "home", "bin", "java"))
-      end
+      expect(jruby_launcher_args("-v 2>&1").join).to match(%r{some/java/home})
     end
   end
 
   it "should use -Xjdkhome argument above JAVA_HOME" do
     with_environment "JAVA_HOME" => File.join("env", "java", "home") do
-      if windows?
-        expect(jruby_launcher_args("-Xjdkhome some/java/home 2>&1").join).to match(%r{some/java/home})
-      else
-        expect(jruby_launcher_args("-Xjdkhome some/java/home").first).to eq(File.join("some", "java", "home", "bin", "java"))
-      end
+      expect(jruby_launcher_args("-Xjdkhome some/java/home 2>&1").join).to match(%r{some/java/home})
     end
   end
 
   it "should drop the backslashes at the end of JAVA_HOME" do
     with_environment "JAVA_HOME" => File.join("some", "java", "home\\\\") do
-      if windows?
-        expect(jruby_launcher_args("").join).to match(%r{some/java/home})
-      else
-        expect(jruby_launcher_args("").first).to eq(File.join("some", "java", "home", "bin", "java"))
-      end
+      expect(jruby_launcher_args("").join).to match(%r{some/java/home})
     end
   end
 
@@ -201,13 +185,7 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
 
   # JRUBY-4709
   it "should include a bare : or ; at the end of the classpath, to include PWD in the path" do
-    expect(classpath_arg(jruby_launcher_args("-Xnobootclasspath -e true"))).to match(
-      if windows?
-        /;$/
-      else
-        /:$/
-      end
-    )
+    expect(classpath_arg(jruby_launcher_args("-Xnobootclasspath -e true"))).to match /;$/
   end
 
   # JRUBY-6016
