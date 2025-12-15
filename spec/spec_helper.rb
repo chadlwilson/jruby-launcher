@@ -2,6 +2,7 @@ require 'rspec'
 require 'rbconfig'
 require 'fileutils'
 require 'timeout'
+require 'open3'
 
 module JRubyLauncherHelper
   JRUBY_EXE = ''
@@ -23,15 +24,22 @@ module JRubyLauncherHelper
   end
 
   def jruby_launcher(args)
-    `#{JRUBY_EXE} #{args}`
+    output = +""
+
+    command = "#{JRUBY_EXE} #{args}"
+    Open3.popen2e(command) do |stdin, stdout_err, wait_thr|
+      stdout_err.each do |line|
+        puts line           # live echo
+        output << line      # still capture
+      end
+
+      p "#{command} exited with value: #{wait_thr.value}"
+    end
+    output
   end
 
   def jruby_launcher_args(args)
     jruby_launcher("-Xcommand #{args}").split("\n")
-  end
-
-  def last_exit_code
-    $?.exitstatus
   end
 
   def classpath_arg(args)
