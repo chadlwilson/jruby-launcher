@@ -555,17 +555,19 @@ void ArgParser::setupMaxHeapAndStack(list<string> userOptions) {
 
 void ArgParser::useModulesIfPresent() {
     logMsg("useModulesIfPresent()");
-
+    printToConsole("Checking modules...\n");
     if (jdkhome.empty()) {
         logMsg("Unable to detect JPMS modules as JAVA_HOME is not specified");
     } else if (access((jdkhome + "/lib/modules").c_str(), R_OK) == 0 ||
             releaseFileHasModules()) {
+        printToConsole("JPMS jmods dir detected, using module flags\n");
         logMsg("JPMS jmods dir detected, using module flags");
         useModulePath = 1;
     }
 }
 
 bool ArgParser::releaseFileHasModules() {
+    printToConsole("Checking release file...\n");
     string releaseFile = jdkhome + "/release";
     std::string line;
     ifstream in(releaseFile.c_str());
