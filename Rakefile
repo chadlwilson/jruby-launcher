@@ -5,7 +5,9 @@ begin
   gem 'rspec'
   require 'rspec/core/rake_task'
   desc "Runs Java Integration Specs"
-  RSpec::Core::RakeTask.new
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.rspec_opts = '--format documentation --force-color'
+  end
   task :default => :spec
 rescue LoadError
   task :default do
