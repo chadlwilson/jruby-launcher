@@ -14,10 +14,10 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
   end
 
   it "should print help message" do
-    args = jruby_launcher_args("-Xhelp 2>&1")
+    args = jruby_launcher_args("-Xhelp")
     expect(args.select {|l| l =~ /JRuby Launcher usage/}).not_to be_empty
     expect(args).to include("-X")
-    args = jruby_launcher_args("-X 2>&1")
+    args = jruby_launcher_args("-X")
     expect(args.detect {|l| l =~ /JRuby Launcher usage/}).not_to be_nil
     expect(args).to include("-X")
   end
@@ -25,19 +25,19 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
   it "should use $JAVACMD when JAVACMD is specified" do
     javacmd_path = File.join("path", "to", "jato")
     with_environment "JAVACMD" => javacmd_path do
-      expect(jruby_launcher_args("-v 2>&1").join).to match(/#{javacmd_path}/)
+      expect(jruby_launcher_args("-v").join).to match(/#{javacmd_path}/)
     end
   end
 
   it "should use $JAVA_HOME/bin/java when JAVA_HOME is specified" do
     with_environment "JAVA_HOME" => File.join("some", "java", "home") do
-      expect(jruby_launcher_args("-v 2>&1").join).to match(%r{some/java/home})
+      expect(jruby_launcher_args("-v").join).to match(%r{some/java/home})
     end
   end
 
   it "should use -Xjdkhome argument above JAVA_HOME" do
     with_environment "JAVA_HOME" => File.join("env", "java", "home") do
-      expect(jruby_launcher_args("-Xjdkhome some/java/home 2>&1").join).to match(%r{some/java/home})
+      expect(jruby_launcher_args("-Xjdkhome some/java/home").join).to match(%r{some/java/home})
     end
   end
 
@@ -48,18 +48,18 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
   end
 
   it "should complain about a missing log argument" do
-    expect(jruby_launcher("-Xtrace 2>&1")).to match(/Argument is missing for "-Xtrace"/)
-    expect(jruby_launcher("-Xtrace -- 2>&1")).to match(/Argument is missing for "-Xtrace"/)
+    expect(jruby_launcher("-Xtrace")).to match(/Argument is missing for "-Xtrace"/)
+    expect(jruby_launcher("-Xtrace --")).to match(/Argument is missing for "-Xtrace"/)
   end
 
   it "should complain about a missing jdkhome argument" do
-    expect(jruby_launcher("-Xjdkhome 2>&1")).to match(/Argument is missing/)
-    expect(jruby_launcher("-Xjdkhome -- 2>&1")).to match(/Argument is missing/)
+    expect(jruby_launcher("-Xjdkhome")).to match(/Argument is missing/)
+    expect(jruby_launcher("-Xjdkhome --")).to match(/Argument is missing/)
   end
 
   it "should complain about a missing classpath append argument" do
-    expect(jruby_launcher("-Xcp:a 2>&1")).to match(/Argument is missing/)
-    expect(jruby_launcher("-Xcp:a -- 2>&1")).to match(/Argument is missing/)
+    expect(jruby_launcher("-Xcp:a")).to match(/Argument is missing/)
+    expect(jruby_launcher("-Xcp:a --")).to match(/Argument is missing/)
   end
 
   it "should run nailgun server with --ng-server option" do
@@ -161,8 +161,8 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
 
   it "does not crash on empty args" do
     expect(jruby_launcher_args("-e ''")).to include("-e")
-    expect(jruby_launcher("-Xtrace '' 2>&1")).to match(/-Xtrace/)
-    expect(jruby_launcher("-Xjdkhome '' 2>&1")).to match(/-Xjdkhome/)
+    expect(jruby_launcher("-Xtrace ''")).to match(/-Xtrace/)
+    expect(jruby_launcher("-Xjdkhome ''")).to match(/-Xjdkhome/)
   end
 
   # JRUBY-4706
@@ -238,11 +238,11 @@ describe "JRuby native launcher", if: /mswin/.match?(RbConfig::CONFIG['host_os']
   end
 
   it "should print the version" do
-    expect(jruby_launcher("-Xversion 2>&1")).to match(/Launcher Version #{JRubyLauncher::VERSION}/)
+    expect(jruby_launcher("-Xversion")).to match(/Launcher Version #{JRubyLauncher::VERSION}/)
   end
 
   it "should not crash on format-strings" do
-    expect(jruby_launcher_args("-e %s%s%s%s%s 2>&1")).to include('-e', '%s%s%s%s%s')
+    expect(jruby_launcher_args("-e %s%s%s%s%s")).to include('-e', '%s%s%s%s%s')
   end
 
   it "should use --module-path on java9+ jruby 9.2.1+" do
