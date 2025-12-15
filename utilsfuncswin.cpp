@@ -146,10 +146,12 @@ bool isConsoleAttached() {
         GetConsoleWindowT getConsoleWindow = (GetConsoleWindowT) GetProcAddress(hKernel32, "GetConsoleWindow");
         if (getConsoleWindow) {
             if (getConsoleWindow() != NULL) {
+                printToConsole("Console is attached.\n");
                 logMsg("Console is attached.");
                 return true;
             }
         } else {
+            printToConsole("GetProcAddress() for GetConsoleWindow failed.\n");
             logErr(true, false, "GetProcAddress() for GetConsoleWindow failed.");
         }
     }
